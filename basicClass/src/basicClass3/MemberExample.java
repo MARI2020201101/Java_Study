@@ -11,10 +11,15 @@ public class MemberExample {
 		member.setMemberID("n3");
 		
 		member.getMemberID();
+		System.out.println("------------");
 		
 		member.removeMemberID("n2");
 		member.getMemberID();
+		System.out.println("------------");
 		
+		member.setMemberID("m1");
+		member.showmemberID();
+		System.out.println("------------");
 		
 		
 

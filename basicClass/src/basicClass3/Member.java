@@ -36,6 +36,12 @@ public class Member {
 		
 	}
 	
+	public void showmemberID() {
+		for(String member : memberID) {
+			System.out.println(member);
+		}
+	}
+	
 	
 
 	
