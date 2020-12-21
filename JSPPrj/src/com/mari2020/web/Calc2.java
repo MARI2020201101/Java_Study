@@ -42,8 +42,11 @@ public class Calc2 extends HttpServlet {
 			
 			application.setAttribute("value",value);
 			application.setAttribute("operater", operater);
+			response.sendRedirect("/calc2.html");
 			
 		}
+		
+		
 	}
 
 }
