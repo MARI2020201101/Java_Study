@@ -7,11 +7,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
 @WebServlet("/Test")
 public class Test extends HttpServlet {
@@ -48,6 +51,11 @@ public class Test extends HttpServlet {
 			catch(Exception e) {
 				System.out.print(e);
 			}
+		
+		HttpSession session = request.getSession();
+		session.setAttribute("name", name);
+		RequestDispatcher rd = request.getRequestDispatcher("Test2");
+		rd.forward(request, response);
 		
 	}
 
