@@ -16,15 +16,18 @@ import memberDao.MemberDao;
 @WebServlet("/memberControl")
 public class MemberControl extends HttpServlet {
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		MemberDao memberdao = new MemberDao();
 		List<Member> members = memberdao.MemberSelect();
-		String memberInfo = null;
+		//String memberInfo = null;
 		for(Member member : members) {
-			memberInfo = member.toString();
+			member.getUserID();
+			member.getUserPassword();
+			member.getUserName();
+			member.getUserAge();
 		}
-		request.setAttribute("memberInfo", memberInfo);
+		request.setAttribute("members", members);
 		RequestDispatcher rd = request.getRequestDispatcher("member.jsp");
 		rd.forward(request, response);
 	}

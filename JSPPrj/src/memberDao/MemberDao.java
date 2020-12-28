@@ -1,27 +1,26 @@
 package memberDao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MemberDao {
 	
+	
 	public List<Member> MemberSelect(){
 		
-		List<Member> members = null;
+		List<Member> members = new ArrayList<Member>();
 		String url = "jdbc:mysql://localhost:3306/membermanagementproject";
 		String user = "root";
 		String password = "mari2020";
 		String sql = "select * from user";
 		
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection(url, user, password);
 			System.out.println("ok");
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery(sql);
+			PreparedStatement st = con.prepareStatement(sql);
+			ResultSet rs = st.executeQuery();
 			
 			while(rs.next()) {
 				String userID = rs.getString(1);
@@ -31,6 +30,10 @@ public class MemberDao {
 				
 				Member member = new Member(userID, userPassword, userName, userAge);
 				members.add(member);
+				
+			rs.close();
+			st.close();
+			con.close();
 			}
 			
 		}catch(Exception e) {
@@ -38,6 +41,6 @@ public class MemberDao {
 		}return members;
 		
 	}
-
-
+	
+	
 }

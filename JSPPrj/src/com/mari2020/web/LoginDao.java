@@ -20,6 +20,9 @@ public class LoginDao {
 			ResultSet rs = st.executeQuery();
 			if(rs.next())return true;
 			
+			st.close();
+			con.close();
+			
 		}catch(Exception e) {
 			System.out.println(e);
 		}

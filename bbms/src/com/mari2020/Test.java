@@ -47,10 +47,13 @@ public class Test extends HttpServlet {
 			int result = st.executeUpdate();
 			System.out.println(result);
 		
+			st.close();
+			con.close();
 			}
 			catch(Exception e) {
 				System.out.print(e);
 			}
+		
 		
 		HttpSession session = request.getSession();
 		session.setAttribute("name", name);
