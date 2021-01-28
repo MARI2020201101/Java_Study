@@ -17,6 +17,7 @@ import com.mari2020.mymemo.service.WriteService;
 
 @Controller
 public class Control {
+
 	ModelAndView mv = new ModelAndView();
 
 	@RequestMapping(value = "/")
