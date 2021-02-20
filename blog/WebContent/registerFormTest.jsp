@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file ="../data/header.jsp" %> 
+<%@ include file ="./WEB-INF/data/header.jsp" %> 
+
 <!DOCTYPE html>
 <html>
 <body>
@@ -22,6 +23,7 @@
     <label for="address">Address</label>
     <input type="text" class="form-control" id="address" name="address" placeholder="Enter address" required>
   </div>
+  <button type="button" class="btn btn-warning mb-3" id ="addressSearch" onClick="goPopup()">Search my Address</button>
   <br>
   <button type="submit" class="btn btn-primary" id ="register">Submit</button>
 </form>

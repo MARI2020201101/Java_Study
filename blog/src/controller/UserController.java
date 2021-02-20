@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -40,13 +41,9 @@ public class UserController extends HttpServlet {
 		String cmd =request.getParameter("cmd");
 		UserService userService = new UserService();
 		HttpSession session = request.getSession();
-		
+		PrintWriter out = response.getWriter();	
 		if(cmd.equals("loginForm")) {
 			//get 로그인 폼 화면
-			
-			System.out.println("loginForm");
-			PrintWriter out = response.getWriter();
-			out.print("loginForm........");
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/user/loginForm.jsp");
 			rd.forward(request, response);
 			
@@ -87,7 +84,7 @@ public class UserController extends HttpServlet {
 													.password(password)
 													.username(username).build();
 			userService.register(registerDto);
-			response.sendRedirect("/WEB-INF/user/loginForm.jsp");
+			response.sendRedirect("/blog/user?cmd=loginForm");
 		}else if(cmd.equals("updateForm")) {
 			System.out.println("updateForm...................................");
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/user/updateForm.jsp");
@@ -113,6 +110,20 @@ public class UserController extends HttpServlet {
 			session.removeAttribute("loginUser");
 			session.invalidate();
 			response.sendRedirect("/blog/board?cmd=list");
+			
+		}else if(cmd.equals("usernameCheck")) {
+			
+			String username = request.getParameter("username");
+			System.out.println(username);
+			
+			boolean check = userService.usernameCheck(username);
+			System.out.println(check);
+			if(check==true) {
+				//username 중복
+				out.print(0);
+			}else {
+				out.print(1);
+			}
 		}
 	}
 	

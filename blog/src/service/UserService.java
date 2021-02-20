@@ -19,5 +19,8 @@ public class UserService {
 	public void update(UpdateDto updateDto) {
 		userDao.update(updateDto);
 	}
+	public boolean usernameCheck(String username) {
+		return userDao.selectbyUsername(username);
+	}
 
 }

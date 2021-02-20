@@ -102,4 +102,28 @@ public void update(UpdateDto updateDto) {
 		   db.close(conn, cp);
 	}
 }
+public boolean selectbyUsername(String username) {
+	try {
+		cp = JdbcConnectionPool.create("jdbc:h2:tcp://localhost/~/blog", "sa", "");
+		conn = cp.getConnection();
+		String sql = "SELECT * FROM USER WHERE USERNAME = ?"; 
+		PreparedStatement ps = conn.prepareStatement(sql);
+		System.out.println("database connection successed.................");
+		
+		ps.setString(1, username);
+		rs = ps.executeQuery();
+		System.out.println("query done...........................");
+		if(rs.next()) {
+			//username ม฿บน
+			System.out.println("select username true.................");
+			return true;	
+		}
+
+		}catch(Exception e) {
+			System.out.println(e);
+		}finally {
+			   db.close(conn, cp, rs);		   
+		}
+		return false;	
+}
 }
