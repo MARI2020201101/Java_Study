@@ -4,6 +4,7 @@ import java.util.List;
 
 import domain.board.BoardDao;
 import domain.board.dto.BoardDto;
+import domain.board.dto.Pagination;
 import domain.board.dto.WriteDto;
 
 public class BoardService {
@@ -17,8 +18,16 @@ public class BoardService {
 		boardDao.save(writeDto);
 	}
 	
-	public BoardDto findbyBoardId() {
-		boardDao.findbyBoardId();
+	public List<BoardDto> listwithPage(Pagination pagination) {
+		List<BoardDto> boards = boardDao.findAllwithPage(pagination);
+		return boards;
+	}
+	/*
+	 * public BoardDto findbyBoardId() { boardDao.findbyBoardId(); }
+	 */
+	public int countAll() {
+		int count = boardDao.countAll();
+		return count;
 	}
 
 }

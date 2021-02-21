@@ -17,14 +17,15 @@
  <br>
 </c:forEach>
 <br>
+<form >
 <nav aria-label="pagination">
   <ul class="pagination justify-content-end">
     <li class="page-item disabled">
-      <a class="page-link" href="#" >Previous</a>
+      <a class="page-link" href="#" tabindex="-1" value="${pagination.prevPage }">Previous</a>
     </li>
 <c:forEach var="pageNum" begin="${pagination.startPage }" end="${pagination.lastPage }">
     <li class="page-item" >
-    <a class="page-link" href="/blog/board?cmd=listpage&pageNum=${pageNum }" >${pageNum}</a>
+    <a class="page-link" href="/blog/board?cmd=listpage&pageNum=${pageNum }" id = "pagenNum" name = "pagenNum" >${pageNum}</a>
     </li>
 </c:forEach>    
     <li class="page-item">
@@ -32,6 +33,16 @@
     </li>
   </ul>
 </nav>
+</form>
 </div>
 </body>
+<script>
+$("#pageNum").on("click",function(e){
+	e.preventDefault();
+	$("form").attr("action","/blog/board?cmd=listpage");
+			.attr("method","get");
+	
+	this.submit();
+});
+</script>
 </html>

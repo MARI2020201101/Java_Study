@@ -11,6 +11,7 @@ import org.h2.jdbcx.JdbcConnectionPool;
 
 import config.DB;
 import domain.board.dto.BoardDto;
+import domain.board.dto.Pagination;
 import domain.board.dto.WriteDto;
 import domain.user.dto.RegisterDto;
 
@@ -77,18 +78,21 @@ public void save(WriteDto writeDto) {
 			   db.close(conn, cp);
 		}
 	}	
-public BoardDto findbyBoardId(){
-
+public List<BoardDto> findAllwithPage(Pagination pagination){
+	int currentPage = pagination.getCurrentPage();
+	List<BoardDto> boards = new ArrayList<BoardDto>();
 	BoardDto board = null;
 	
 	try {
 		cp = JdbcConnectionPool.create("jdbc:h2:tcp://localhost/~/blog", "sa", "");
 		conn = cp.getConnection();
-		String sql = "SELECT * FROM BOARD WHERE BOARDID = ?"; 
+		String sql = "SELECT * FROM BOARD ORDER BY BOARDID DESC LIMIT ? , ?"; 
 		PreparedStatement ps = conn.prepareStatement(sql);
 		System.out.println("database connection successed.................");
 		
-		ps.setString(1, username);
+		//0 -> 3 -> 6 -> 9....
+		ps.setInt(1, (currentPage-1)*3);
+		ps.setInt(2, pagination.getCriteria());
 		rs = ps.executeQuery();
 
 			while(rs.next()) {
@@ -99,16 +103,63 @@ public BoardDto findbyBoardId(){
 						.title(rs.getString(4))
 						.writeDate(rs.getString(5))
 						.userId(rs.getInt(6)).build();
+				boards.add(board);
 			}
 
-		System.out.println("Board list successed.................");
-		return board;
+		System.out.println("Board list with page successed.................");
 		
 		}catch(Exception e) {
 			System.out.println(e);
 		}finally {
 			   db.close(conn, cp, rs);		   
 		}
+	return boards;
+	}
+	/*
+	 * public BoardDto findbyBoardId(){
+	 * 
+	 * BoardDto board = null;
+	 * 
+	 * try { cp = JdbcConnectionPool.create("jdbc:h2:tcp://localhost/~/blog", "sa",
+	 * ""); conn = cp.getConnection(); String sql =
+	 * "SELECT * FROM BOARD WHERE BOARDID = ?"; PreparedStatement ps =
+	 * conn.prepareStatement(sql);
+	 * System.out.println("database connection successed.................");
+	 * 
+	 * ps.setString(1, username); rs = ps.executeQuery();
+	 * 
+	 * while(rs.next()) { board = BoardDto.builder() .boardId(rs.getInt(1))
+	 * .content(rs.getString(2)) .count(rs.getInt(3)) .title(rs.getString(4))
+	 * .writeDate(rs.getString(5)) .userId(rs.getInt(6)).build(); }
+	 * 
+	 * System.out.println("Board list successed................."); return board;
+	 * 
+	 * }catch(Exception e) { System.out.println(e); }finally { db.close(conn, cp,
+	 * rs); }
+	 * 
+	 * }
+	 */
+public int countAll(){
+	int count = 0;
+	try {
+		cp = JdbcConnectionPool.create("jdbc:h2:tcp://localhost/~/blog", "sa", "");
+		conn = cp.getConnection();
+		String sql = "SELECT COUNT(*) FROM BOARD"; 
+		PreparedStatement ps = conn.prepareStatement(sql);
+		System.out.println("database connection successed.................");
 
+		rs = ps.executeQuery();
+		if(rs.next()) {
+			count = rs.getInt(1);
+		}
+		System.out.println("Board count successed.................");
+		
+		}catch(Exception e) {
+			System.out.println(e);
+		}finally {
+			   db.close(conn, cp, rs);		   
+		}
+	return count;
+		
 	}
 }

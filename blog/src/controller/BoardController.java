@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import domain.board.dto.BoardDto;
+import domain.board.dto.Pagination;
 import domain.board.dto.WriteDto;
 import service.BoardService;
 
@@ -41,10 +42,25 @@ public class BoardController extends HttpServlet {
 		//detail 
 		
 		if(cmd.equals("list")) {
-			List<BoardDto> boards = boardService.list();
+			Pagination pagination = new Pagination();
+			int count = boardService.countAll();
+			pagination.setTotal(count);
+			System.out.println(count);
+			System.out.println(pagination);
+			List<BoardDto> boards = boardService.listwithPage(pagination);
+			
+			request.setAttribute("pagination", pagination);
 			request.setAttribute("boards", boards);
+
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/board/list.jsp");
 			rd.forward(request, response);
+			
+			/*
+			 * List<BoardDto> boards = boardService.list(); request.setAttribute("boards",
+			 * boards); RequestDispatcher rd =
+			 * request.getRequestDispatcher("/WEB-INF/board/list.jsp"); rd.forward(request,
+			 * response);
+			 */
 		
 		}else if(cmd.equals("writeForm")) {
 			
@@ -64,9 +80,26 @@ public class BoardController extends HttpServlet {
 			
 		}else if(cmd.equals("detail")) {
 
-			boardService.findbyBoardId();
+			//boardService.findbyBoardId();
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/board/detail.jsp");
 			rd.forward(request, response);
+			
+		}else if(cmd.equals("listpage")) {
+			Pagination pagination = new Pagination();
+			String currentPage = request.getParameter("pageNum");
+			
+			if(currentPage!=null) {
+				pagination.setCurrentPage(Integer.parseInt(currentPage));
+			}
+			List<BoardDto> boards = boardService.listwithPage(pagination);
+			System.out.println(pagination);
+			request.setAttribute("pagination", pagination);
+			request.setAttribute("boards", boards);
+
+
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/board/listpage.jsp");
+			rd.forward(request, response);
+			
 		}
 		
 	}

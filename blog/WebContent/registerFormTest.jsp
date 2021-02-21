@@ -23,7 +23,7 @@
     <label for="address">Address</label>
     <input type="text" class="form-control" id="address" name="address" placeholder="Enter address" required>
   </div>
-  <button type="button" class="btn btn-warning mb-3" id ="addressSearch" onClick="goPopup()">Search my Address</button>
+  <button type="button" class="btn btn-warning mb-3" id ="addressSearch" href="/blog/WebContent/jusoPopupTest.jsp">Search my Address</button>
   <br>
   <button type="submit" class="btn btn-primary" id ="register">Submit</button>
 </form>
