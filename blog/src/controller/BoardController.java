@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import domain.board.dto.BoardDto;
+import domain.board.dto.BoardwithUserDto;
 import domain.board.dto.Pagination;
+import domain.board.dto.UpdateDto;
 import domain.board.dto.WriteDto;
 import service.BoardService;
 
@@ -42,25 +44,26 @@ public class BoardController extends HttpServlet {
 		//detail 
 		
 		if(cmd.equals("list")) {
-			Pagination pagination = new Pagination();
+			
 			int count = boardService.countAll();
-			pagination.setTotal(count);
 			System.out.println(count);
+			
+			Pagination pagination = null; 
+			String currentPage = request.getParameter("pageNum");
+			
+			if(currentPage!=null) {
+				pagination= new Pagination(count, Integer.parseInt(currentPage));
+			}else {
+				pagination= new Pagination(count, 1);
+			}
 			System.out.println(pagination);
 			List<BoardDto> boards = boardService.listwithPage(pagination);
-			
+
 			request.setAttribute("pagination", pagination);
 			request.setAttribute("boards", boards);
-
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/board/list.jsp");
 			rd.forward(request, response);
 			
-			/*
-			 * List<BoardDto> boards = boardService.list(); request.setAttribute("boards",
-			 * boards); RequestDispatcher rd =
-			 * request.getRequestDispatcher("/WEB-INF/board/list.jsp"); rd.forward(request,
-			 * response);
-			 */
 		
 		}else if(cmd.equals("writeForm")) {
 			
@@ -79,29 +82,30 @@ public class BoardController extends HttpServlet {
 			rd.forward(request, response);
 			
 		}else if(cmd.equals("detail")) {
-
-			//boardService.findbyBoardId();
+			int boardId = Integer.parseInt(request.getParameter("boardId"));
+			BoardwithUserDto board = boardService.findbyBoardIdwithUser(boardId);
+			String writeDate = board.getWriteDate();
+			board.setWriteDate(writeDate.substring(0, 10));
+			request.setAttribute("board", board);
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/board/detail.jsp");
 			rd.forward(request, response);
 			
-		}else if(cmd.equals("listpage")) {
-			Pagination pagination = new Pagination();
-			String currentPage = request.getParameter("pageNum");
+		}else if(cmd.equals("update")) {
+			int boardId = Integer.parseInt(request.getParameter("boardId"));
+			String title = request.getParameter("title");
+			String content = request.getParameter("content");
+			UpdateDto updateDto = UpdateDto.builder().title(title).content(content).build();
+			boardService.update(boardId, updateDto);
+			response.sendRedirect("/blog/board?cmd=list");
 			
-			if(currentPage!=null) {
-				pagination.setCurrentPage(Integer.parseInt(currentPage));
-			}
-			List<BoardDto> boards = boardService.listwithPage(pagination);
-			System.out.println(pagination);
-			request.setAttribute("pagination", pagination);
-			request.setAttribute("boards", boards);
-
-
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/board/listpage.jsp");
+		}else if(cmd.equals("updateForm")) {
+			int boardId = Integer.parseInt(request.getParameter("boardId"));
+			BoardDto board = boardService.findbyBoardId(boardId);
+			request.setAttribute("board", board);
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/board/updateForm.jsp");
 			rd.forward(request, response);
-			
 		}
-		
+
 	}
 	
 }

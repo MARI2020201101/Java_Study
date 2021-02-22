@@ -9,8 +9,8 @@ public class Pagination {
 	
 	private int total; //전체 게시글 수 
 	private int criteria = 3; //한 페이지당 게시물 개수
-	private int prevPage;  
-	private int nextPage;
+	//private int prevPage;  
+	//private int nextPage;
 	private int currentPage =1;
 	private int startPage;
 	private int lastPage;
@@ -27,14 +27,16 @@ public class Pagination {
 	
 	//쿼리에 들어가는 숫자.  0번째부터 3개 -> 3번째부터 3개 -> 6번째부터 3개 
 	//(currentPage -1)*3 = 쿼리 
-	public Pagination(){
+	public Pagination(int total, int currentPage){
 		//10/3.0 ->3.3 올림 하면 4
-		realLastPage = (int) Math.ceil(total / criteria*(1.0));
+		this.total = total;
+		this.currentPage = currentPage;
+		realLastPage = (int) Math.ceil(total / (criteria*1.0));
 		lastPage = (int)(10*(Math.ceil(currentPage / 10.0)));
 		startPage = lastPage - 9;
-		lastPage =  lastPage < realLastPage ? lastPage : realLastPage;
-		prevPage = currentPage -1;
-		nextPage = lastPage +1;
+		lastPage =  lastPage <= realLastPage ? lastPage : realLastPage;
+		//prevPage = currentPage -1;
+		//nextPage = lastPage +1;
 	
 }
 }

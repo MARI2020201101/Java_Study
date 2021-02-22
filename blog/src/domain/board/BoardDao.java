@@ -11,7 +11,9 @@ import org.h2.jdbcx.JdbcConnectionPool;
 
 import config.DB;
 import domain.board.dto.BoardDto;
+import domain.board.dto.BoardwithUserDto;
 import domain.board.dto.Pagination;
+import domain.board.dto.UpdateDto;
 import domain.board.dto.WriteDto;
 import domain.user.dto.RegisterDto;
 
@@ -115,30 +117,40 @@ public List<BoardDto> findAllwithPage(Pagination pagination){
 		}
 	return boards;
 	}
-	/*
-	 * public BoardDto findbyBoardId(){
-	 * 
-	 * BoardDto board = null;
-	 * 
-	 * try { cp = JdbcConnectionPool.create("jdbc:h2:tcp://localhost/~/blog", "sa",
-	 * ""); conn = cp.getConnection(); String sql =
-	 * "SELECT * FROM BOARD WHERE BOARDID = ?"; PreparedStatement ps =
-	 * conn.prepareStatement(sql);
-	 * System.out.println("database connection successed.................");
-	 * 
-	 * ps.setString(1, username); rs = ps.executeQuery();
-	 * 
-	 * while(rs.next()) { board = BoardDto.builder() .boardId(rs.getInt(1))
-	 * .content(rs.getString(2)) .count(rs.getInt(3)) .title(rs.getString(4))
-	 * .writeDate(rs.getString(5)) .userId(rs.getInt(6)).build(); }
-	 * 
-	 * System.out.println("Board list successed................."); return board;
-	 * 
-	 * }catch(Exception e) { System.out.println(e); }finally { db.close(conn, cp,
-	 * rs); }
-	 * 
-	 * }
-	 */
+	
+public BoardDto findbyBoardId(int boardId){
+	  
+	  BoardDto board = null;
+	  
+	  try { 
+		  cp = JdbcConnectionPool.create("jdbc:h2:tcp://localhost/~/blog", "sa", ""); 
+		  conn = cp.getConnection(); 
+		  String sql = "SELECT * FROM BOARD WHERE BOARDID = ?"; 
+		  PreparedStatement ps = conn.prepareStatement(sql);
+		  System.out.println("database connection successed.................");
+	  
+		  ps.setInt(1, boardId); rs = ps.executeQuery();
+	  
+		  while(rs.next()) { 
+			  board = BoardDto.builder() 
+					  .boardId(rs.getInt(1))
+					  .content(rs.getString(2)) 
+					  .count(rs.getInt(3)) 
+					  .title(rs.getString(4))
+					  .writeDate(rs.getString(5)) 
+					  .userId(rs.getInt(6)).build(); 
+			  }
+		  System.out.println("Board detail successed................."); 
+	  
+	  	  }catch(Exception e) { 
+	  		System.out.println(e); 
+	  	  }finally { 
+	  			db.close(conn, cp, rs); 
+	  			}
+	return board;
+	  
+	  }
+	 
 public int countAll(){
 	int count = 0;
 	try {
@@ -162,4 +174,59 @@ public int countAll(){
 	return count;
 		
 	}
+public BoardwithUserDto findbyBoardIdwithUser(int boardId){
+	  
+	BoardwithUserDto board = null;
+	  
+	  try { 
+		  cp = JdbcConnectionPool.create("jdbc:h2:tcp://localhost/~/blog", "sa", ""); 
+		  conn = cp.getConnection(); 
+		  String sql = "SELECT 	B.*,U.USERNAME FROM BOARD B INNER JOIN USER U ON B.USERID = U.USERID WHERE B.BOARDID = ?"; 
+		  PreparedStatement ps = conn.prepareStatement(sql);
+		  System.out.println("database connection successed.................");
+	  
+		  ps.setInt(1, boardId); rs = ps.executeQuery();
+	  
+		  while(rs.next()) { 
+			  board = BoardwithUserDto.builder() 
+					  .boardId(rs.getInt(1))
+					  .content(rs.getString(2)) 
+					  .count(rs.getInt(3)) 
+					  .title(rs.getString(4))
+					  .writeDate(rs.getString(5)) 
+					  .userId(rs.getInt(6))
+					  .username(rs.getString(7)).build(); 
+			  }
+		  System.out.println("Board detail WITH USER JOIN successed................."); 
+	  
+	  	  }catch(Exception e) { 
+	  		System.out.println(e); 
+	  	  }finally { 
+	  			db.close(conn, cp, rs); 
+	  			}
+	return board;
+	  
+	  }
+public void update(int boardId, UpdateDto updateDto) {	
+	try {
+	cp = JdbcConnectionPool.create("jdbc:h2:tcp://localhost/~/blog", "sa", "");
+	conn = cp.getConnection();
+	String sql = "UPDATE BOARD B SET B.TITLE = ?, B.CONTENT = ?, B.WRITEDATE = ? WHERE BOARDID = ? "; 
+	PreparedStatement ps = conn.prepareStatement(sql);
+	System.out.println("database connection successed.................");
+	
+	ps.setString(1, updateDto.getTitle());
+	ps.setString(2, updateDto.getContent());
+	ps.setObject(3, ts);
+	ps.setInt(4, boardId);
+	ps.execute();
+	
+	System.out.println("update board succeessed............");
+	
+	}catch(Exception e) {
+		System.out.println(e);
+	}finally {
+		   db.close(conn, cp);
+	}
+}
 }

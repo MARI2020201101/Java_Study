@@ -11,7 +11,7 @@
     <h5 class="card-title" >${board.title }</h5>
     <h6 class="card-subtitle" id="boardId" name="boardId" hidden="true">${board.boardId }</h6>
     <p class="card-text">${board.content }</p>
-    <a href="${pageContext.request.contextPath}/board?cmd=detail" class="btn btn-primary">Read more Detail</a>
+    <a href="${pageContext.request.contextPath}/board?cmd=detail&boardId=${board.boardId}" class="btn btn-primary">Read more Detail</a>
   </div>
  </div>
  <br>
@@ -19,16 +19,16 @@
 <br>
 <nav aria-label="pagination">
   <ul class="pagination justify-content-end">
-    <li class="page-item disabled">
-      <a class="page-link" href="#" >Previous</a>
+    <li class="page-item ${pagination.currentPage ==1 ? "disabled" : "" }">
+      <a class="page-link" href="/blog/board?cmd=list&pageNum=${pagination.currentPage-1 }" >Previous</a>
     </li>
 <c:forEach var="pageNum" begin="${pagination.startPage }" end="${pagination.lastPage }">
     <li class="page-item" >
-    <a class="page-link" href="/blog/board?cmd=listpage&pageNum=${pageNum }" >${pageNum}</a>
+    <a class="page-link" href="/blog/board?cmd=list&pageNum=${pageNum }" >${pageNum}</a>
     </li>
 </c:forEach>    
-    <li class="page-item">
-      <a class="page-link" href="#" >Next</a>
+    <li class="page-item ${pagination.currentPage == pagination.lastPage ? "disabled" : "" }">
+      <a class="page-link" href="/blog/board?cmd=list&pageNum=${pagination.currentPage+1}" >Next</a>
     </li>
   </ul>
 </nav>
