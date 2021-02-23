@@ -16,8 +16,8 @@ public class BoardService {
 		List<BoardDto> boards = boardDao.findAll();
 		return boards;
 	}
-	public void save(WriteDto writeDto) {
-		boardDao.save(writeDto);
+	public int save(WriteDto writeDto) {
+		return boardDao.save(writeDto);
 	}
 	
 	public List<BoardDto> listwithPage(Pagination pagination) {
@@ -36,8 +36,11 @@ public class BoardService {
 	public BoardwithUserDto findbyBoardIdwithUser(int boardId) {
 		return boardDao.findbyBoardIdwithUser(boardId);
 	}
-	public void update(int boardId, UpdateDto updateDto) {
-		boardDao.update(boardId, updateDto);
+	public int update(int boardId, UpdateDto updateDto) {
+		return boardDao.update(boardId, updateDto);
+	}
+	public int delete(int boardId) {
+		return boardDao.delete(boardId);
 	}
 
 }

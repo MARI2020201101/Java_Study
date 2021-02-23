@@ -23,6 +23,7 @@ public class BoardDao {
 	ResultSet rs = null;
 	DB db = new DB();
 	Timestamp ts = new Timestamp(System.currentTimeMillis());
+	int result = 0;
 	
 	public List<BoardDto> findAll(){
 		List<BoardDto> boards = new ArrayList<BoardDto>();
@@ -57,7 +58,7 @@ public class BoardDao {
 			}
 		return boards;
 		}
-public void save(WriteDto writeDto) {	
+public int save(WriteDto writeDto) {	
 		try {
 		cp = JdbcConnectionPool.create("jdbc:h2:tcp://localhost/~/blog", "sa", "");
 		conn = cp.getConnection();
@@ -70,7 +71,7 @@ public void save(WriteDto writeDto) {
 		ps.setString(3, writeDto.getTitle());
 		ps.setObject(4, ts);
 		ps.setInt(5, writeDto.getUserId());
-		ps.execute();
+		result = ps.executeUpdate();
 		
 		System.out.println("insert board succeessed............");
 		
@@ -79,6 +80,7 @@ public void save(WriteDto writeDto) {
 		}finally {
 			   db.close(conn, cp);
 		}
+		return result;
 	}	
 public List<BoardDto> findAllwithPage(Pagination pagination){
 	int currentPage = pagination.getCurrentPage();
@@ -156,7 +158,7 @@ public int countAll(){
 	try {
 		cp = JdbcConnectionPool.create("jdbc:h2:tcp://localhost/~/blog", "sa", "");
 		conn = cp.getConnection();
-		String sql = "SELECT COUNT(*) FROM BOARD"; 
+		String sql = "SELECT COUNT(BOARDID) FROM BOARD"; 
 		PreparedStatement ps = conn.prepareStatement(sql);
 		System.out.println("database connection successed.................");
 
@@ -207,7 +209,7 @@ public BoardwithUserDto findbyBoardIdwithUser(int boardId){
 	return board;
 	  
 	  }
-public void update(int boardId, UpdateDto updateDto) {	
+public int update(int boardId, UpdateDto updateDto) {	
 	try {
 	cp = JdbcConnectionPool.create("jdbc:h2:tcp://localhost/~/blog", "sa", "");
 	conn = cp.getConnection();
@@ -219,7 +221,7 @@ public void update(int boardId, UpdateDto updateDto) {
 	ps.setString(2, updateDto.getContent());
 	ps.setObject(3, ts);
 	ps.setInt(4, boardId);
-	ps.execute();
+	result = ps.executeUpdate();
 	
 	System.out.println("update board succeessed............");
 	
@@ -228,5 +230,25 @@ public void update(int boardId, UpdateDto updateDto) {
 	}finally {
 		   db.close(conn, cp);
 	}
+	return result;
+}
+public int delete(int boardId) {	
+	try {
+	cp = JdbcConnectionPool.create("jdbc:h2:tcp://localhost/~/blog", "sa", "");
+	conn = cp.getConnection();
+	String sql = "DELETE FROM BOARD WHERE BOARDID = ?"; 
+	PreparedStatement ps = conn.prepareStatement(sql);
+	
+	ps.setInt(1, boardId);
+	result = ps.executeUpdate();
+	
+	System.out.println("DELETE board succeessed............");
+	
+	}catch(Exception e) {
+		System.out.println(e);
+	}finally {
+		   db.close(conn, cp);
+	}
+	return result;
 }
 }

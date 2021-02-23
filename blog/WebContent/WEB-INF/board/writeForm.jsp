@@ -9,14 +9,13 @@
 <body>
 <div class = "container">
 <form action ="/blog/board?cmd=write" method="post">
-<input type="text" class="form-control" id="userId" name="userId" value="${SessionScope.loginUser.userId }" hidden="true">
+<input type="text" class="form-control" id="userId" name="userId" value="${loginUser.userId }" hidden="true">
+	
 	<div class="input-group mb-3">
-	  <span class="input-group-text" id="inputGroup-sizing-default" >Title</span>
-	  <input type="text" name="title" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-	  
+	  <input type="text" name="title" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">	  
 	</div>
-		<div id="summernote" name="content">
-	</div>
+		<textarea id="summernote" name="content">
+	</textarea>
 	<br>
 	  <button type="submit" class="btn btn-primary">Submit</button>
 </form>
