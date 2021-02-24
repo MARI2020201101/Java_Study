@@ -25,9 +25,7 @@ public void save(RegisterDto registerDto) {
 	cp = JdbcConnectionPool.create("jdbc:h2:tcp://localhost/~/blog", "sa", "");
 	conn = cp.getConnection();
 	String sql = "INSERT INTO USER VALUES (hibernate_sequence.nextval,?,?,?,?,?,?)"; 
-	PreparedStatement ps = conn.prepareStatement(sql);
-	System.out.println("database connection successed.................");
-	
+	PreparedStatement ps = conn.prepareStatement(sql);	
 	ps.setString(1, registerDto.getAddress());
 	ps.setString(2, registerDto.getEmail());
 	ps.setObject(3, ts);
@@ -50,7 +48,6 @@ public UserDto findbyUsernameAndPassword(LoginDto loginDto) {
 	conn = cp.getConnection();
 	String sql = "SELECT USERID,ADDRESS,EMAIL,JOINDATE,ROLE,USERNAME FROM USER WHERE USERNAME = ? AND PASSWORD = ?"; 
 	PreparedStatement ps = conn.prepareStatement(sql);
-	System.out.println("database connection successed.................");
 	UserDto user = null;
 	
 	
@@ -85,8 +82,7 @@ public void update(UpdateDto updateDto) {
 	conn = cp.getConnection();
 	String sql = "UPDATE USER U SET U.USERNAME = ?, U. PASSWORD = ?, U.ADDRESS = ? , U.EMAIL = ? WHERE U.USERID = ? "; 
 	PreparedStatement ps = conn.prepareStatement(sql);
-	System.out.println("database connection successed.................");
-	
+
 	ps.setString(1, updateDto.getUsername());
 	ps.setString(2, updateDto.getPassword());
 	ps.setString(3, updateDto.getAddress());
@@ -108,7 +104,6 @@ public boolean selectbyUsername(String username) {
 		conn = cp.getConnection();
 		String sql = "SELECT * FROM USER WHERE USERNAME = ?"; 
 		PreparedStatement ps = conn.prepareStatement(sql);
-		System.out.println("database connection successed.................");
 		
 		ps.setString(1, username);
 		rs = ps.executeQuery();

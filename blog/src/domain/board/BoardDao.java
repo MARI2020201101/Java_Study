@@ -34,7 +34,6 @@ public class BoardDao {
 			conn = cp.getConnection();
 			String sql = "SELECT * FROM BOARD"; 
 			PreparedStatement ps = conn.prepareStatement(sql);
-			System.out.println("database connection successed.................");
 
 			rs = ps.executeQuery();
 
@@ -63,9 +62,7 @@ public int save(WriteDto writeDto) {
 		cp = JdbcConnectionPool.create("jdbc:h2:tcp://localhost/~/blog", "sa", "");
 		conn = cp.getConnection();
 		String sql = "INSERT INTO BOARD VALUES (hibernate_sequence.nextval,?,?,?,?,?)"; 
-		PreparedStatement ps = conn.prepareStatement(sql);
-		System.out.println("database connection successed.................");
-		
+		PreparedStatement ps = conn.prepareStatement(sql);		
 		ps.setString(1, writeDto.getContent());
 		ps.setInt(2, 0);
 		ps.setString(3, writeDto.getTitle());
@@ -91,9 +88,7 @@ public List<BoardDto> findAllwithPage(Pagination pagination){
 		cp = JdbcConnectionPool.create("jdbc:h2:tcp://localhost/~/blog", "sa", "");
 		conn = cp.getConnection();
 		String sql = "SELECT * FROM BOARD ORDER BY BOARDID DESC LIMIT ? , ?"; 
-		PreparedStatement ps = conn.prepareStatement(sql);
-		System.out.println("database connection successed.................");
-		
+		PreparedStatement ps = conn.prepareStatement(sql);		
 		//0 -> 3 -> 6 -> 9....
 		ps.setInt(1, (currentPage-1)*3);
 		ps.setInt(2, pagination.getCriteria());
@@ -129,8 +124,6 @@ public BoardDto findbyBoardId(int boardId){
 		  conn = cp.getConnection(); 
 		  String sql = "SELECT * FROM BOARD WHERE BOARDID = ?"; 
 		  PreparedStatement ps = conn.prepareStatement(sql);
-		  System.out.println("database connection successed.................");
-	  
 		  ps.setInt(1, boardId); rs = ps.executeQuery();
 	  
 		  while(rs.next()) { 
@@ -160,8 +153,6 @@ public int countAll(){
 		conn = cp.getConnection();
 		String sql = "SELECT COUNT(BOARDID) FROM BOARD"; 
 		PreparedStatement ps = conn.prepareStatement(sql);
-		System.out.println("database connection successed.................");
-
 		rs = ps.executeQuery();
 		if(rs.next()) {
 			count = rs.getInt(1);
@@ -185,8 +176,6 @@ public BoardwithUserDto findbyBoardIdwithUser(int boardId){
 		  conn = cp.getConnection(); 
 		  String sql = "SELECT 	B.*,U.USERNAME FROM BOARD B INNER JOIN USER U ON B.USERID = U.USERID WHERE B.BOARDID = ?"; 
 		  PreparedStatement ps = conn.prepareStatement(sql);
-		  System.out.println("database connection successed.................");
-	  
 		  ps.setInt(1, boardId); rs = ps.executeQuery();
 	  
 		  while(rs.next()) { 
@@ -214,9 +203,7 @@ public int update(int boardId, UpdateDto updateDto) {
 	cp = JdbcConnectionPool.create("jdbc:h2:tcp://localhost/~/blog", "sa", "");
 	conn = cp.getConnection();
 	String sql = "UPDATE BOARD B SET B.TITLE = ?, B.CONTENT = ?, B.WRITEDATE = ? WHERE BOARDID = ? "; 
-	PreparedStatement ps = conn.prepareStatement(sql);
-	System.out.println("database connection successed.................");
-	
+	PreparedStatement ps = conn.prepareStatement(sql);	
 	ps.setString(1, updateDto.getTitle());
 	ps.setString(2, updateDto.getContent());
 	ps.setObject(3, ts);

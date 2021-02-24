@@ -10,8 +10,11 @@
 	<div class="container">
 	<br/>
 <a class="btn btn-info" href="/blog/board?cmd=list&pageNum=${pageNum}">List</a>
+<c:if test="${board.userId == sessionScope.loginUser.userId}">
 <a class="btn btn-danger btn-delete" >Delete</a>
 <a class="btn btn-warning" href="/blog/board?cmd=updateForm&boardId=${board.boardId }&pageNum=${pageNum}">Edit</a>
+</c:if>
+
 
 		<br /><br/>
 		<h3 class="m-2">

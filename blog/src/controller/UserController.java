@@ -84,7 +84,7 @@ public class UserController extends HttpServlet {
 			userService.register(registerDto);
 			response.sendRedirect("/blog/user?cmd=loginForm");
 		}else if(cmd.equals("updateForm")) {
-			System.out.println("updateForm...................................");
+			
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/user/updateForm.jsp");
 			rd.forward(request, response);
 			

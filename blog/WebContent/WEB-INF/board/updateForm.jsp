@@ -1,9 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file ="../data/header.jsp" %> 
-<!-- include summernote css/js -->
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
 <!DOCTYPE html>
 <html>
 <body>
@@ -15,18 +13,18 @@
 					aria-describedby="inputGroup-sizing-default" value="${board.title }">
 			</div>
 			<textarea id="summernote" class="form-control" id="content"
-				name="content">
+				name="content" >
 				${board.content }
 			</textarea>
 			<br>
 			<button type="submit" class="btn btn-primary">Submit</button>
 			
 			<input type="text" class="form-control" id="userId" name="userId"
-				value="${loginUser.userId }" hidden="true"> 
+				value="${board.userId }" hidden="true"> 
 			<input type="text" class="form-control" id="boardId" name="boardId"
 				value="${board.boardId }" hidden="true"> 
-			<input type="text" class="form-control" id="pageNum" name="pageNum" value="${pageNum }"
-				hidden="true">
+			<input type="text" class="form-control" id="pageNum" name="pageNum" 
+				value="${pageNum }" hidden="true">
 		</form>
 	</div>
 </body>

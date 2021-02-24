@@ -42,7 +42,6 @@ public class BoardController extends HttpServlet {
 	protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String cmd =request.getParameter("cmd");
 		PrintWriter out = response.getWriter();
-		HttpSession session = request.getSession();
 	
 		//writeform : get
 		//write : post
@@ -72,9 +71,7 @@ public class BoardController extends HttpServlet {
 			
 		
 		}else if(cmd.equals("writeForm")) {
-			
-			UserDto loginUser = (UserDto) session.getAttribute("loginUser");
-			request.setAttribute("loginUser", loginUser);
+			System.out.println("writeForm...................................");
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/board/writeForm.jsp");
 			rd.forward(request, response);
 			
@@ -111,20 +108,19 @@ public class BoardController extends HttpServlet {
 			String title = request.getParameter("title");
 			String content = request.getParameter("content");
 			UpdateDto updateDto = UpdateDto.builder().title(title).content(content).build();
-			boardService.update(boardId, updateDto);
-
-			request.setAttribute("pageNum", pageNum);
-			RequestDispatcher rd = request.getRequestDispatcher("/board?cmd=list");
-			rd.forward(request, response);
-			
+			int result = boardService.update(boardId, updateDto);
+			if(result ==1 ) {
+				response.sendRedirect("board?cmd=list&pageNum="+pageNum);
+			}		
 		}else if(cmd.equals("updateForm")) {
-
+			int pageNum = Integer.parseInt(request.getParameter("pageNum"));
 			int boardId = Integer.parseInt(request.getParameter("boardId"));
 			BoardDto board = boardService.findbyBoardId(boardId);
+			request.setAttribute("pageNum", pageNum);
 			request.setAttribute("board", board);
-
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/board/updateForm.jsp");
 			rd.forward(request, response);
+			
 		}else if(cmd.equals("delete")) {
 			
 			int boardId = Integer.parseInt(request.getParameter("boardId"));

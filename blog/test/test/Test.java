@@ -17,8 +17,6 @@ public class Test {
 		
 		String s = "2021-12-12 00:00:00";
 		System.out.println(s.substring(0,10 ));
-		
-		System.out.println("=============================script test======================================");
-		Script.back("script test");
+	
 	}
 }
