@@ -2,12 +2,14 @@ package service;
 
 import java.util.List;
 
+import domain.CommonDto;
 import domain.board.BoardDao;
 import domain.board.dto.BoardDto;
 import domain.board.dto.BoardwithUserDto;
 import domain.board.dto.Pagination;
 import domain.board.dto.UpdateDto;
 import domain.board.dto.WriteDto;
+import utils.Script;
 
 public class BoardService {
 	BoardDao boardDao = new BoardDao();
@@ -34,7 +36,8 @@ public class BoardService {
 		return count;
 	}
 	public BoardwithUserDto findbyBoardIdwithUser(int boardId) {
-		return boardDao.findbyBoardIdwithUser(boardId);
+		boardDao.updateCount(boardId);
+		return boardDao.findbyBoardIdwithUser(boardId);	
 	}
 	public int update(int boardId, UpdateDto updateDto) {
 		return boardDao.update(boardId, updateDto);

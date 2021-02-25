@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import domain.CommonDto;
 import domain.board.dto.BoardDto;
 import domain.board.dto.BoardwithUserDto;
 import domain.board.dto.Pagination;
@@ -92,7 +93,7 @@ public class BoardController extends HttpServlet {
 			}
 		}else if(cmd.equals("detail")) {
 			int pageNum = Integer.parseInt(request.getParameter("pageNum"));
-			int boardId = Integer.parseInt(request.getParameter("boardId"));
+			int boardId = Integer.parseInt(request.getParameter("boardId"));		
 			BoardwithUserDto board = boardService.findbyBoardIdwithUser(boardId);
 			String writeDate = board.getWriteDate();
 			board.setWriteDate(writeDate.substring(0, 10));

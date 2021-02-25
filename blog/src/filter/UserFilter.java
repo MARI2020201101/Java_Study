@@ -24,15 +24,27 @@ public class UserFilter implements javax.servlet.Filter {
 		HttpServletResponse response = (HttpServletResponse) resp;
 
 		HttpSession session = request.getSession();
-
+		String uri = request.getRequestURI();
 		String cmd = request.getParameter("cmd");
-		//login filter : write
-		/*
-		 * if(cmd.contains("write")) { UserDto loginUser = null; loginUser = (UserDto)
-		 * session.getAttribute("loginUser"); if(loginUser==null) {
-		 * Script.back(response, "Please Login.................."); } }else{
-		 * chain.doFilter(request, response);}
-		 */
+		if(cmd.equals("writeForm")) {
+			UserDto loginUser = null;
+			loginUser = (UserDto) session.getAttribute("loginUser");
+			if(loginUser==null) {
+				Script.back(response, "Please Login............");
+				return;
+			}
+		}else if(uri.contains("board")&& cmd.equals("updateForm")) {
+			UserDto loginUser = null;
+			loginUser = (UserDto) session.getAttribute("loginUser");
+			int userId = Integer.parseInt(request.getParameter("userId"));
+			if(loginUser==null) {
+				Script.back(response, "Please Login............");
+				return;
+			}else if(loginUser.getUserId()!=userId) {
+				Script.back(response, "Non Qualified Action............");
+				return;
+			}
+		}
 		chain.doFilter(request, response);}
 
     }

@@ -202,12 +202,11 @@ public int update(int boardId, UpdateDto updateDto) {
 	try {
 	cp = JdbcConnectionPool.create("jdbc:h2:tcp://localhost/~/blog", "sa", "");
 	conn = cp.getConnection();
-	String sql = "UPDATE BOARD B SET B.TITLE = ?, B.CONTENT = ?, B.WRITEDATE = ? WHERE BOARDID = ? "; 
+	String sql = "UPDATE BOARD B SET B.TITLE = ?, B.CONTENT = ? WHERE BOARDID = ? "; 
 	PreparedStatement ps = conn.prepareStatement(sql);	
 	ps.setString(1, updateDto.getTitle());
 	ps.setString(2, updateDto.getContent());
-	ps.setObject(3, ts);
-	ps.setInt(4, boardId);
+	ps.setInt(3, boardId);
 	result = ps.executeUpdate();
 	
 	System.out.println("update board succeessed............");
@@ -230,6 +229,24 @@ public int delete(int boardId) {
 	result = ps.executeUpdate();
 	
 	System.out.println("DELETE board succeessed............");
+	
+	}catch(Exception e) {
+		System.out.println(e);
+	}finally {
+		   db.close(conn, cp);
+	}
+	return result;
+}
+public int updateCount(int boardId) {	
+	try {
+	cp = JdbcConnectionPool.create("jdbc:h2:tcp://localhost/~/blog", "sa", "");
+	conn = cp.getConnection();
+	String sql = "UPDATE BOARD SET COUNT = COUNT +1 WHERE BOARDID = ? "; 
+	PreparedStatement ps = conn.prepareStatement(sql);	
+	ps.setInt(1, boardId);
+	result = ps.executeUpdate();
+	
+	System.out.println("update count succeessed............");
 	
 	}catch(Exception e) {
 		System.out.println(e);
