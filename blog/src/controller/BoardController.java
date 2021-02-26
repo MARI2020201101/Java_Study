@@ -18,15 +18,18 @@ import domain.board.dto.BoardwithUserDto;
 import domain.board.dto.Pagination;
 import domain.board.dto.UpdateDto;
 import domain.board.dto.WriteDto;
+import domain.reply.dto.DetailDto;
+import domain.reply.dto.ReplyDto;
 import domain.user.dto.UserDto;
 import service.BoardService;
+import service.ReplyService;
 
 
 @WebServlet("/board")
 public class BoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	BoardService boardService = new BoardService();
-
+	ReplyService replyService = new ReplyService();
 	
     public BoardController() {
     
@@ -95,8 +98,10 @@ public class BoardController extends HttpServlet {
 			int pageNum = Integer.parseInt(request.getParameter("pageNum"));
 			int boardId = Integer.parseInt(request.getParameter("boardId"));		
 			BoardwithUserDto board = boardService.findbyBoardIdwithUser(boardId);
+			List<DetailDto> replyList = replyService.findAllbyBoardId(boardId);
 			String writeDate = board.getWriteDate();
 			board.setWriteDate(writeDate.substring(0, 10));
+			request.setAttribute("replyList", replyList);
 			request.setAttribute("pageNum", pageNum);
 			request.setAttribute("board", board);
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/board/detail.jsp");
